@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["SampleElk/SampleElk.csproj", "SampleElk/"]
-RUN dotnet restore "SampleElk/SampleElk.csproj"
+COPY ["InquiryAPI/InquiryAPI.csproj", "InquiryAPI/"]
+RUN dotnet restore "InquiryAPI/InquiryAPI.csproj"
 COPY . .
-WORKDIR "/src/SampleElk"
-RUN dotnet build "SampleElk.csproj" -c Release -o /app/build
+WORKDIR "/src/InquiryAPI"
+RUN dotnet build "InquiryAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "SampleElk.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "InquiryAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SampleElk.dll"]
+ENTRYPOINT ["dotnet", "InquiryAPI.dll"]
